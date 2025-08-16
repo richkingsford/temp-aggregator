@@ -30,6 +30,8 @@ export interface JobPosting {
   requiresLaser: boolean;
   hygieneType: HygieneType;
   officeProfile: OfficeProfile;
+  status?: 'open' | 'booked';
+  bookedBy?: string; // Hygienist's user ID
 }
 
 export interface JobTemplate {

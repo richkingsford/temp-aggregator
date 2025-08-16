@@ -1,23 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Navbar() {
-  const router = useRouter();
-  const [userRole, setUserRole] = useState<string | null>(null);
-
-  useEffect(() => {
-    const role = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null;
-    setUserRole(role);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('userRole');
-    setUserRole(null);
-    router.push('/login');
-  };
+  const { data: session, status } = useSession();
+  const isLoading = status === 'loading';
 
   return (
     <nav className="bg-white shadow-sm border-b border-border">
@@ -29,10 +17,16 @@ export default function Navbar() {
           <div className="flex items-center space-x-6">
             <Link href="/" className="text-text-primary hover:text-primary transition-colors">Dentist View</Link>
             <Link href="/hygienist" className="text-text-primary hover:text-primary transition-colors">Hygienist View</Link>
-            {userRole ? (
-              <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition-colors">
-                Logout
-              </button>
+
+            {isLoading ? (
+              <div className="w-24 h-8 bg-gray-200 rounded-md animate-pulse"></div>
+            ) : session ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">{session.user?.email}</span>
+                <button onClick={() => signOut({ callbackUrl: '/login' })} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                  Logout
+                </button>
+              </div>
             ) : (
               <Link href="/login" className="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors">
                 Login

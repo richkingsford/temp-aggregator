@@ -1,31 +1,59 @@
 'use client';
 
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { JobPosting } from "@/app/lib/types";
-import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function JobPostingCardClient({ job }: { job: JobPosting }) {
-    const [userRole, setUserRole] = useState<string | null>(null);
+    const { data: session, status } = useSession();
+    const router = useRouter();
+    const [isBooked, setIsBooked] = useState(job.status === 'booked');
+    const [error, setError] = useState('');
 
-    useEffect(() => {
-        const role = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null;
-        setUserRole(role);
-    }, []);
+    const handleBookNow = async () => {
+        setError('');
+        if (status !== 'authenticated') {
+            router.push('/login');
+            return;
+        }
 
-    const handleBookNow = () => {
-        alert(`Booking for ${job.title} at ${job.officeProfile.name} has been requested! A confirmation will be sent shortly.`);
+        try {
+            const res = await fetch(`/api/jobs/${job.id}/book`, {
+                method: 'PUT',
+            });
+
+            if (res.ok) {
+                setIsBooked(true);
+            } else {
+                const data = await res.json();
+                setError(data.message || 'Failed to book job');
+            }
+        } catch (err) {
+            setError('An unexpected error occurred');
+        }
     };
 
-    if (userRole !== 'hygienist') {
+    const isHygienist = session?.user?.role === 'hygienist';
+    const canBook = isHygienist && !isBooked;
+
+    if (!isHygienist) {
         return null;
     }
 
     return (
         <div className="bg-gray-50 p-6">
+            {error && <p className="text-red-500 text-sm mb-2 text-center">{error}</p>}
             <button
                 onClick={handleBookNow}
-                className="w-full bg-secondary hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-md transition-colors"
+                disabled={!canBook}
+                className={`w-full font-bold py-3 px-4 rounded-md transition-colors ${
+                    canBook
+                        ? 'bg-secondary hover:bg-teal-600 text-white'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
             >
-                Book Now
+                {isBooked ? 'Booked' : 'Book Now'}
             </button>
         </div>
     );

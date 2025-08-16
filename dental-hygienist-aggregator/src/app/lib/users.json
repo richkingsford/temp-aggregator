@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "email": "dentist@example.com",
+    "password": "$2a$10$fJ7L6v5s4z3E2b1c0D.e.uVp.iO/gX8h3jK.lP6q9r7s8T/u0Vw2",
+    "role": "dentist"
+  },
+  {
+    "id": "2",
+    "email": "hygienist@example.com",
+    "password": "$2a$10$fJ7L6v5s4z3E2b1c0D.e.uVp.iO/gX8h3jK.lP6q9r7s8T/u0Vw2",
+    "role": "hygienist"
+  }
+]
