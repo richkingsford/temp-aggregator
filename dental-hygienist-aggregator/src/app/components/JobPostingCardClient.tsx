@@ -7,7 +7,7 @@ export default function JobPostingCardClient({ job }: { job: JobPosting }) {
     const [userRole, setUserRole] = useState<string | null>(null);
 
     useEffect(() => {
-        const role = localStorage.getItem('userRole');
+        const role = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null;
         setUserRole(role);
     }, []);
 
@@ -20,10 +20,10 @@ export default function JobPostingCardClient({ job }: { job: JobPosting }) {
     }
 
     return (
-        <div className="mt-4">
+        <div className="bg-gray-50 p-6">
             <button
                 onClick={handleBookNow}
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+                className="w-full bg-secondary hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-md transition-colors"
             >
                 Book Now
             </button>

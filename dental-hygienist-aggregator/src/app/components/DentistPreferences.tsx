@@ -12,23 +12,25 @@ export default async function DentistPreferences() {
   const preferences = await getDentistPreferences();
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-      <h2 className="text-xl font-bold mb-4">Your Preferences</h2>
-      <div>
-        <h3 className="font-semibold">Pay Rates</h3>
-        <ul className="list-disc list-inside">
-          {preferences.payRates.map((rate) => (
-            <li key={rate}>${rate}/hr</li>
-          ))}
-        </ul>
-      </div>
-      <div className="mt-4">
-        <h3 className="font-semibold">Time Slots</h3>
-        <ul className="list-disc list-inside">
-          {preferences.timeSlots.map((slot, index) => (
-            <li key={index}>{slot.start} - {slot.end}</li>
-          ))}
-        </ul>
+    <div className="bg-white border border-border rounded-lg shadow-sm p-6 mb-8">
+      <h2 className="text-xl font-bold text-primary mb-4">Your Office Preferences</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 className="font-semibold text-text-primary mb-2">Pay Rates</h3>
+          <ul className="space-y-1">
+            {preferences.payRates.map((rate) => (
+              <li key={rate} className="text-gray-600">${rate}/hr</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 className="font-semibold text-text-primary mb-2">Standard Time Slots</h3>
+          <ul className="space-y-1">
+            {preferences.timeSlots.map((slot, index) => (
+              <li key={index} className="text-gray-600">{slot.start} - {slot.end}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

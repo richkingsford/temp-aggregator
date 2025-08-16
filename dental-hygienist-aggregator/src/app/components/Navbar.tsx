@@ -9,8 +9,7 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
-    // This effect will run on the client side after the component mounts
-    const role = localStorage.getItem('userRole');
+    const role = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null;
     setUserRole(role);
   }, []);
 
@@ -21,23 +20,25 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-md">
-      <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold text-gray-800">
-          Dental Temp
-        </Link>
-        <div className="flex items-center space-x-4">
-          <Link href="/" className="text-gray-800">Dentist View</Link>
-          <Link href="/hygienist" className="text-gray-800">Hygienist View</Link>
-          {userRole ? (
-            <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-              Logout
-            </button>
-          ) : (
-            <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-              Login
-            </Link>
-          )}
+    <nav className="bg-white shadow-sm border-b border-border">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <Link href="/" className="text-2xl font-bold text-primary">
+            DentalTemp
+          </Link>
+          <div className="flex items-center space-x-6">
+            <Link href="/" className="text-text-primary hover:text-primary transition-colors">Dentist View</Link>
+            <Link href="/hygienist" className="text-text-primary hover:text-primary transition-colors">Hygienist View</Link>
+            {userRole ? (
+              <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                Logout
+              </button>
+            ) : (
+              <Link href="/login" className="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                Login
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </nav>
